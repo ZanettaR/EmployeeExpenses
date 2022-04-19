@@ -8,7 +8,7 @@ public class ConnectionUtil {
     public static Connection createConnection(){
         try {
             Connection conn = DriverManager.getConnection("jdbc:postgresql://zanetta-db.cnoezlpdmwcu.us-east-1.rds.amazonaws.com/reimbursement?user=postgres&password=IuzSAi5eeIowaSbGT7Mk");
-            
+
             return conn;
         } catch (SQLException e) {
             e.printStackTrace();
