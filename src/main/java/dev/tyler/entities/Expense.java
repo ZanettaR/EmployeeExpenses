@@ -5,12 +5,12 @@ public class Expense {
     private long date;
     private String description;
     private String status;
-    private int amount;
+    private double amount;
 
     public Expense() {
     }
 
-    public Expense(int id, long date, String description, String status, int amount) {
+    public Expense(int id, long date, String description, String status, double amount) {
         this.id = id;
         this.date = date;
         this.description = description;
@@ -50,11 +50,11 @@ public class Expense {
         this.status = status;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

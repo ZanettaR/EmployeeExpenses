@@ -2,11 +2,10 @@ package dev.tyler.data;
 
 import dev.tyler.entities.Expense;
 import dev.tyler.utilities.ConnectionUtil;
+import dev.tyler.utilities.LogLevel;
+import dev.tyler.utilities.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     @Override
@@ -14,18 +13,19 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
         try{
             Connection conn = ConnectionUtil.createConnection();
             String sql = "insert into expense values(default, ?, ?, ?, ?)";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, expense.getDate());
             ps.setString(2, expense.getDescription());
             ps.setString(3, expense.getStatus());
-            ps.setInt(4, expense.getAmount());
+            ps.setDouble(4, expense.getAmount());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
             int generatedId = rs.getInt("expense_id");
             expense.setId(generatedId);
             return expense;
-        }catch (SQLException e){
+        } catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
             return null;
         }
     }
@@ -34,39 +34,59 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     public Expense getExpenseById(int id) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "";
+            String sql = "select * from expense where expense_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
 
-            return null;
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            Expense expense = new Expense();
+            expense.setId(rs.getInt("expense_id"));
+            expense.setDate(rs.getLong("expense_date"));
+            expense.setDescription(rs.getString("description"));
+            expense.setStatus(rs.getString("status"));
+            expense.setAmount(rs.getDouble("amount"));
+
+            return expense;
         }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
             return null;
         }
-
     }
 
     @Override
     public Expense updateExpense(Expense expense) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "";
+            String sql = "update expense set expense_date = ?, description = ?, " +
+                    "status = ?, amount = ? where expense_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setLong(1, expense.getDate());
+            ps.setString(2, expense.getDescription());
+            ps.setString(3,expense.getStatus());
+            ps.setDouble(4, expense.getAmount());
+            ps.setInt(5, expense.getId());
+            ps.executeUpdate();
 
-            return null;
+            return expense;
         }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
             return null;
         }
-
     }
 
     @Override
     public boolean deleteExpenseById(int id) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "";
+            String sql = "delete from expense where expense_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
 
             return true;
         }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
             return false;
         }
 
