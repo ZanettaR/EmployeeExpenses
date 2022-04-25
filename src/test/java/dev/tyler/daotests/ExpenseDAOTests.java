@@ -1,6 +1,5 @@
 package dev.tyler.daotests;
 
-
 import dev.tyler.data.ExpenseDAO;
 import dev.tyler.data.ExpenseDAOPostgresImpl;
 import dev.tyler.entities.Expense;
@@ -13,8 +12,8 @@ public class ExpenseDAOTests {
 
     @Test
     @Order(1)
-    void create_expense_test(){
-        Expense food = new Expense(0, 0, "Hibachi", "PENDING", 24.36);
+    void create_expense(){
+        Expense food = new Expense(0, 0, "Hibachi", "PENDING", 24.36, 2);
         food.setDate(System.currentTimeMillis());
         Expense savedExpense = expenseDAO.createExpense(food);
         ExpenseDAOTests.testExpense = savedExpense;
@@ -37,5 +36,4 @@ public class ExpenseDAOTests {
         Assertions.assertEquals(testExpense.getDescription(), retrievedExpense.getDescription());
     }
 
-    //delete test here
 }

@@ -12,12 +12,13 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     public Expense createExpense(Expense expense) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "insert into expense values(default, ?, ?, ?, ?)";
+            String sql = "insert into expense values(default, ?, ?, ?, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, expense.getDate());
             ps.setString(2, expense.getDescription());
             ps.setString(3, expense.getStatus());
             ps.setDouble(4, expense.getAmount());
+            ps.setInt(5, expense.getExpenseOwner());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -46,6 +47,7 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
             expense.setDescription(rs.getString("description"));
             expense.setStatus(rs.getString("status"));
             expense.setAmount(rs.getDouble("amount"));
+            expense.setExpenseOwner(rs.getInt("eid"));
 
             return expense;
         }catch (SQLException e){
@@ -59,13 +61,14 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
         try{
             Connection conn = ConnectionUtil.createConnection();
             String sql = "update expense set expense_date = ?, description = ?, " +
-                    "status = ?, amount = ? where expense_id = ?";
+                    "status = ?, amount = ?, eid = ? where expense_id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setLong(1, expense.getDate());
             ps.setString(2, expense.getDescription());
             ps.setString(3,expense.getStatus());
             ps.setDouble(4, expense.getAmount());
-            ps.setInt(5, expense.getId());
+            ps.setInt(5, expense.getExpenseOwner());
+            ps.setInt(6, expense.getId());
             ps.executeUpdate();
 
             return expense;
