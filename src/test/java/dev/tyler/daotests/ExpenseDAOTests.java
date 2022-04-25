@@ -12,8 +12,9 @@ public class ExpenseDAOTests {
 
     @Test
     @Order(1)
-    void create_expense(){
-        Expense food = new Expense(0, 0, "Hibachi", "PENDING", 24.36, 2);
+
+    void create_expense_test(){
+        Expense food = new Expense(0, 0, "Hibachi", "PENDING", 24.36, 1);
         food.setDate(System.currentTimeMillis());
         Expense savedExpense = expenseDAO.createExpense(food);
         ExpenseDAOTests.testExpense = savedExpense;
