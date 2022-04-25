@@ -5,17 +5,19 @@ public class Expense {
     private long date;
     private String description;
     private String status;
-    private int amount;
+    private double amount;
+    private int expenseOwner;
 
     public Expense() {
     }
 
-    public Expense(int id, long date, String description, String status, int amount) {
+    public Expense(int id, long date, String description, String status, double amount, int expenseOwner) {
         this.id = id;
         this.date = date;
         this.description = description;
         this.status = status;
         this.amount = amount;
+        this.expenseOwner = expenseOwner;
     }
 
     public int getId() {
@@ -50,12 +52,20 @@ public class Expense {
         this.status = status;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public int getExpenseOwner() {
+        return expenseOwner;
+    }
+
+    public void setExpenseOwner(int expenseOwner) {
+        this.expenseOwner = expenseOwner;
     }
 
     @Override

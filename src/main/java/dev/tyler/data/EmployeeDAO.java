@@ -13,5 +13,7 @@ public interface EmployeeDAO {
 
     Employee updateEmployee(Employee employee);
 
+    boolean addEmployeeExpense(int id);
+
     List<Expense> getEmployeeExpenses(int id);
 }
