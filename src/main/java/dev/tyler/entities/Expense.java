@@ -6,16 +6,18 @@ public class Expense {
     private String description;
     private String status;
     private double amount;
+    private int expenseOwner;
 
     public Expense() {
     }
 
-    public Expense(int id, long date, String description, String status, double amount) {
+    public Expense(int id, long date, String description, String status, double amount, int expenseOwner) {
         this.id = id;
         this.date = date;
         this.description = description;
         this.status = status;
         this.amount = amount;
+        this.expenseOwner = expenseOwner;
     }
 
     public int getId() {
@@ -56,6 +58,14 @@ public class Expense {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public int getExpenseOwner() {
+        return expenseOwner;
+    }
+
+    public void setExpenseOwner(int expenseOwner) {
+        this.expenseOwner = expenseOwner;
     }
 
     @Override

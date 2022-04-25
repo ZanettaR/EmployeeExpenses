@@ -14,7 +14,7 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO {
     public Employee createEmployee(Employee employee) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "";
+            String sql = "insert into employee values(default, ?, ?, 0)";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             return null;
