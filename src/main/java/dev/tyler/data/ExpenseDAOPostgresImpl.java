@@ -6,19 +6,20 @@ import dev.tyler.utilities.LogLevel;
 import dev.tyler.utilities.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExpenseDAOPostgresImpl implements ExpenseDAO{
     @Override
     public Expense createExpense(Expense expense) {
         try{
             Connection conn = ConnectionUtil.createConnection();
-            String sql = "insert into expense values(default, ?, ?, ?, ?, ?)";
+            String sql = "insert into expense values(default, ?, ?, default, ?, ?)";
             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, expense.getDate());
             ps.setString(2, expense.getDescription());
-            ps.setString(3, expense.getStatus());
-            ps.setDouble(4, expense.getAmount());
-            ps.setInt(5, expense.getExpenseOwner());
+            ps.setDouble(3, expense.getAmount());
+            ps.setInt(4, expense.getExpenseOwner());
             ps.execute();
             ResultSet rs = ps.getGeneratedKeys();
             rs.next();
@@ -92,6 +93,58 @@ public class ExpenseDAOPostgresImpl implements ExpenseDAO{
             Logger.log(e.getMessage(), LogLevel.ERROR);
             return false;
         }
+    }
 
+    @Override
+    public List<Expense> getExpenseByStatus(String status) {
+        try{
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from expense where status = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            List<Expense> expenses = new ArrayList();
+            while (rs.next()){
+                Expense expense = new Expense();
+                expense.setId(rs.getInt("expense_id"));
+                expense.setDate(rs.getLong("expense_date"));
+                expense.setDescription(rs.getString("description"));
+                expense.setStatus(rs.getString("status"));
+                expense.setAmount(rs.getDouble("amount"));
+                expense.setExpenseOwner(rs.getInt("eid"));
+                expenses.add(expense);
+            }
+            return expenses;
+        }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
+            return null;
+        }
+    }
+
+    @Override
+    public List<Expense> getAllExpenses() {
+        try{
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from expense";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Expense> expenses = new ArrayList();
+            while (rs.next()){
+                Expense expense = new Expense();
+                expense.setId(rs.getInt("expense_id"));
+                expense.setDate(rs.getLong("expense_date"));
+                expense.setDescription(rs.getString("description"));
+                expense.setStatus(rs.getString("status"));
+                expense.setAmount(rs.getDouble("amount"));
+                expense.setExpenseOwner(rs.getInt("eid"));
+                expenses.add(expense);
+            }
+            return expenses;
+
+        }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
+            return null;
+        }
     }
 }

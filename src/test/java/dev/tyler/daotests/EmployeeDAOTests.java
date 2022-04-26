@@ -42,6 +42,14 @@ public class EmployeeDAOTests {
 
     @Test
     @Order(4)
+    void get_all_employees(){
+        List<Employee> employees = employeeDAO.getAllEmployees();
+        int totalEmployees = employees.size();
+        Assertions.assertTrue(totalEmployees >= 1);
+    }
+
+    @Test
+    @Order(5)
     void get_employee_expenses(){
         ExpenseDAO expenseDAO = new ExpenseDAOPostgresImpl();
         expenseDAO.createExpense(new Expense(0, System.currentTimeMillis(), "Create from employee test.", "", 54.36,  testEmployee.getId()));

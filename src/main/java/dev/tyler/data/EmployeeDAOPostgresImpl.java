@@ -75,8 +75,48 @@ public class EmployeeDAOPostgresImpl implements EmployeeDAO {
     }
 
     @Override
-    public boolean addEmployeeExpense(int id) {
-        return false;
+    public boolean deleteEmployeeById(int id) {
+        try{
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "delete from expense using employee where employee.employee_id = expense.eid and employee_id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+
+            sql = "delete from employee where employee_id = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.execute();
+            return true;
+
+        } catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
+            return false;
+        }
+    }
+
+    @Override
+    public List<Employee> getAllEmployees() {
+        try{
+            Connection conn = ConnectionUtil.createConnection();
+            String sql = "select * from employee";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Employee> employees = new ArrayList();
+            while (rs.next()){
+               Employee employee = new Employee();
+               employee.setId(rs.getInt("employee_id"));
+               employee.setFirstName(rs.getString("firstname"));
+               employee.setLastName(rs.getString("lastname"));
+               employees.add(employee);
+            }
+            return employees;
+
+        }catch (SQLException e){
+            Logger.log(e.getMessage(), LogLevel.ERROR);
+            return null;
+        }
     }
 
     @Override
