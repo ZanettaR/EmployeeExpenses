@@ -1,5 +1,7 @@
 package dev.tyler.entities;
 
+import java.util.Date;
+
 public class Expense {
     private int id;
     private long date;
@@ -72,7 +74,7 @@ public class Expense {
     public String toString() {
         return "Expense{" +
                 "id=" + id +
-                ", date=" + date +
+                ", date=" + new Date(date).toString() +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 ", amount=" + amount +

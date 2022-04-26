@@ -2,8 +2,11 @@ package dev.tyler.daotests;
 
 import dev.tyler.data.ExpenseDAO;
 import dev.tyler.data.ExpenseDAOPostgresImpl;
+import dev.tyler.entities.Employee;
 import dev.tyler.entities.Expense;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ExpenseDAOTests {
@@ -35,6 +38,22 @@ public class ExpenseDAOTests {
         expenseDAO.updateExpense(testExpense);
         Expense retrievedExpense = expenseDAO.getExpenseById(testExpense.getId());
         Assertions.assertEquals(testExpense.getDescription(), retrievedExpense.getDescription());
+    }
+
+    @Test
+    @Order(4)
+    void get_all_expenses(){
+        List<Expense> expenses = expenseDAO.getAllExpenses();
+        int totalExpenses= expenses.size();
+        Assertions.assertTrue(totalExpenses >= 1);
+    }
+
+    @Test
+    @Order(4)
+    void get_expense_by_status(){
+        List<Expense> expenses = expenseDAO.getExpenseByStatus("PENDING");
+        int totalExpenses= expenses.size();
+        Assertions.assertTrue(totalExpenses >= 1);
     }
 
 }
