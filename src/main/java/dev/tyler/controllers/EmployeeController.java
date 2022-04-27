@@ -13,8 +13,14 @@ public class EmployeeController {
 
     public static EmployeeService employeeService = new EmployeeServiceImpl(new EmployeeDAOPostgresImpl());
 
-    public static void placholder(Context context){
-        context.result("Implementation Loading ....");
+    public static void updateEmployee(Context context){
+        int id = Integer.parseInt(context.pathParam("id"));
+        String body = context.body();
+        Gson gson = new Gson();
+        Employee employee = gson.fromJson(body, Employee.class);
+        employee.setId(id);
+        employeeService.updateEmployee(employee);
+        context.result("Employee was updated.");
     }
 
     // Get all employees

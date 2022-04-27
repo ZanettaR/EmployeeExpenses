@@ -74,7 +74,7 @@ public class Expense {
     public String toString() {
         return "Expense{" +
                 "id=" + id +
-                ", date=" + new Date(date).toString() +
+                ", date=" + new Date(date) +
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 ", amount=" + amount +
