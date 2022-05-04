@@ -18,9 +18,14 @@ public class EmployeeController {
         String body = context.body();
         Gson gson = new Gson();
         Employee employee = gson.fromJson(body, Employee.class);
-        employee.setId(id);
-        employeeService.updateEmployee(employee);
-        context.result("Employee was updated.");
+        if(employee != null){
+            employee.setId(id);
+            employeeService.updateEmployee(employee);
+            context.result("Employee was updated.");
+        }else{
+            context.result("Employee not found");
+            context.status(404);
+        }
     }
 
     // Get all employees
@@ -41,16 +46,29 @@ public class EmployeeController {
     public static void deleteEmployee(Context context){
         int id = Integer.parseInt(context.pathParam("id"));
         Gson gson = new Gson();
-        String json = gson.toJson(employeeService.deleteEmployee(id));
-        context.result(json);
+        boolean result = employeeService.deleteEmployee(id);
+        if(result){
+            String json = gson.toJson(true);
+            context.result(json);
+        }else{
+            context.result("Employee not found.");
+            context.status(404);
+        }
+
     }
 
     //Get selected employee
     public static void viewEmployee(Context context){
         int id = Integer.parseInt(context.pathParam("id"));
         Gson gson = new Gson();
-        String json = gson.toJson(employeeService.getEmployee(id));
-        context.result(json);
+        Employee e  = employeeService.getEmployee(id);
+        if(e != null){
+            String json = gson.toJson(e);
+            context.result(json);
+        }else{
+            context.result("Employee not found.");
+            context.status(404);
+        }
     }
 
     // Get selected employee's expenses
@@ -66,8 +84,13 @@ public class EmployeeController {
         String body = context.body();
         Gson gson = new Gson();
         Expense expense = gson.fromJson(body, Expense.class);
-        expense.setExpenseOwner(id);
-        employeeService.addEmployeeExpense(expense);
-        context.result("A new employee expense was created.");
+        if(expense != null){
+            expense.setExpenseOwner(id);
+            employeeService.addEmployeeExpense(expense);
+            context.result("A new employee expense was created.");
+            context.status(201);
+        }else{
+            context.result("A new employee was not created at this time.");
+        }
     }
 }
