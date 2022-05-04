@@ -25,7 +25,6 @@ public class ExpenseController {
             String json = gson.toJson(expenseService.getExpenseByStatus(status));
             context.result(json);
         }
-
     }
 
     public static void viewExpense(Context context){

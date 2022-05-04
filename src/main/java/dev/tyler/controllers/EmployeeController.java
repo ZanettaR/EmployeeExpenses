@@ -41,15 +41,22 @@ public class EmployeeController {
         Employee employee = gson.fromJson(body, Employee.class);
         employeeService.addEmployee(employee);
         context.result("A new employee was created.");
+        context.status(201);
     }
 
     public static void deleteEmployee(Context context){
         int id = Integer.parseInt(context.pathParam("id"));
         Gson gson = new Gson();
-        boolean result = employeeService.deleteEmployee(id);
-        if(result){
-            String json = gson.toJson(true);
-            context.result(json);
+        Employee e = employeeService.getEmployee(id);
+
+        if(e != null){
+            boolean result = employeeService.deleteEmployee(id);
+            if(result){
+                context.result("Employee was deleted.");
+            }else{
+                context.result("Employee was not deleted.");
+            }
+
         }else{
             context.result("Employee not found.");
             context.status(404);
@@ -90,7 +97,7 @@ public class EmployeeController {
             context.result("A new employee expense was created.");
             context.status(201);
         }else{
-            context.result("A new employee was not created at this time.");
+            context.result("A new employee expense was not created at this time.");
         }
     }
 }
